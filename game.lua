@@ -1,7 +1,7 @@
 local Game = {}
 
 local sti = require("vendor.sti")
-local Camera = require ("vendor.hump.camera")
+local gamera = require("vendor.gamera.gamera")
 
 local Player = require("player")
 
@@ -12,8 +12,9 @@ function Game:load()
     self.map:box2d_init(self.world)
     self.map.layers.solid.visible = false
     self.player = Player(self.world)
-    self.camera = Camera(self.player.x, self.player.y, 2)
-    self.camera.smoother = Camera.smooth.damped(10)
+    self.camera = gamera.new(0,0,640,480)
+    self.camera:setPosition(self.player.x, self.player.x)
+    self.camera:setScale(2.0)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
 end
 
@@ -21,25 +22,22 @@ function Game:update(dt)
     self.world:update(dt)
     self.player:update(dt)
 
-    --local dx, dy = self.player.x - self.camera.x, self.player.y - self.camera.y
-    --self.camera:move(dx/2, dy/2)
-    self.camera:lockPosition(self.player.x, self.player.y, Camera.smooth.damped(10))
-    --self.camera:lookAt(self.player.x, self.player.y)
-    --if self.camera.x < love.graphics.getWidth() / 2 then
-    --    self.camera.x = love.graphics.getWidth() / 2
-    --end
+    local cx, cy = self.camera:getPosition()
+    local dx = self.player.x - cx
+    local dy = self.player.y - cy
+    self.camera:setPosition(cx + dx * dt * 10, cy + dy * dt * 10)
+end
+
+function Game.drawGame(l, t, w, h)
+    love.graphics.draw(Game.background)
+    Game.map:drawLayer(Game.map.layers.tile_layer1)
+    Game.map:drawLayer(Game.map.layers.tile_layer2)
+    Game.player:draw()
+    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
 end
 
 function Game:draw()
-    
-    self.camera:attach()
-    ---
-    love.graphics.draw(self.background)
-    self.map:drawLayer(self.map.layers.tile_layer1)
-    self.map:drawLayer(self.map.layers.tile_layer2)
-    self.player:draw()
-    ---
-    self.camera:detach()
+    self.camera:draw(Game.drawGame)
 end
 
 function Game.beginContact(a, b, collision)
