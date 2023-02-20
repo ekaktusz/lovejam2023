@@ -21,6 +21,8 @@ function Player:new(world)
     self.hasDoubleJump = true
     self.doubleJumpModifier = 0.8
 
+    self.fireStrength = 0.5 -- value between 0 and 1, showing the strength of fire
+
     self.physics = {}
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
