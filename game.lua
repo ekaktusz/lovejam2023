@@ -2,6 +2,7 @@ local Game = {}
 
 local sti = require("vendor.sti")
 local gamera = require("vendor.gamera.gamera")
+local Lighter = require("vendor.lighter")
 
 local Player = require("player")
 
@@ -16,6 +17,9 @@ function Game:load()
     self.camera:setPosition(self.player.x, self.player.x)
     self.camera:setScale(2.0)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
+    self.lighter = Lighter()
+    self.playerLight = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
+    self.lightCanvas = love.graphics.newCanvas()
 end
 
 function Game:update(dt)
@@ -26,6 +30,14 @@ function Game:update(dt)
     local dx = self.player.x - cx
     local dy = self.player.y - cy
     self.camera:setPosition(cx + dx * dt * 10, cy + dy * dt * 10)
+
+    self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
+
+    -- This is for lights, should be at the end
+    love.graphics.setCanvas({ Game.lightCanvas, stencil = true})
+    love.graphics.clear(0.4, 0.4, 0.4) -- Global illumination level
+    Game.lighter:drawLights()
+    love.graphics.setCanvas()
 end
 
 function Game.drawGame(l, t, w, h)
@@ -34,7 +46,13 @@ function Game.drawGame(l, t, w, h)
     Game.map:drawLayer(Game.map.layers.tile_layer2)
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
+    
+    -- This is for lights, should be at the end
+    love.graphics.setBlendMode("multiply", "premultiplied")
+    love.graphics.draw(Game.lightCanvas)
+    love.graphics.setBlendMode("alpha")
 end
+  
 
 function Game:draw()
     self.camera:draw(Game.drawGame)
