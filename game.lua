@@ -3,6 +3,7 @@ local Game = {}
 local sti = require("vendor.sti")
 local gamera = require("vendor.gamera.gamera")
 local Lighter = require("vendor.lighter")
+local Parallax = require ("vendor.parallax.parallax")
 
 local Player = require("player")
 
@@ -20,6 +21,14 @@ function Game:load()
     self.lighter = Lighter()
     self.playerLight = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
     self.lightCanvas = love.graphics.newCanvas()
+
+    self.parallaxLayers = {
+        parallax_1 = Parallax.new(self.camera, 1.25),
+        parallax_2 = Parallax.new(self.camera, 1)
+    }
+
+    self.background_p1 = love.graphics.newImage("assets/imgs/ParallaxBackground/DownLayer.png")
+    self.background_p2 = love.graphics.newImage("assets/imgs/ParallaxBackground/MiddleLayer.png")
 end
 
 function Game:update(dt)
@@ -41,7 +50,21 @@ function Game:update(dt)
 end
 
 function Game.drawGame(l, t, w, h)
-    love.graphics.draw(Game.background)
+
+    Game.parallaxLayers.parallax_1:draw(function()
+        -- Draw something distant from the camera here.
+        local wx, wy = Game.camera:toWorld(0, 0)
+        love.graphics.draw(Game.background_p1, wx, wy, 0, 2, 2)
+    end)
+
+    
+    Game.parallaxLayers.parallax_2:draw(function()
+        -- Draw something distant from the camera here.
+        love.graphics.draw(Game.background_p2, Game.camera:toWorld(0, 0), 0 , 2, 2)
+    end)
+    
+
+    --love.graphics.draw(Game.background)
     Game.map:drawLayer(Game.map.layers.tile_layer1)
     Game.map:drawLayer(Game.map.layers.tile_layer2)
     Game.player:draw()
