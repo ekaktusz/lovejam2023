@@ -1,12 +1,14 @@
 local Player = Object:extend()
 
+local anim8 = require("vendor.anim8.anim8")
+
 function Player:new(world)
     self.x = 100
     self.y = 0
     self.dx = 0
     self.dy = 0
-    self.width = 16
-    self.height = 16
+    self.width = 64
+    self.height = 64
 
     self.acceleration = 4000
     self.friction = 3500
@@ -28,13 +30,22 @@ function Player:new(world)
     self.physics.body:setFixedRotation(true)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+
+    self.animation = {}
+    self.animation.texture = love.graphics.newImage("assets/textures/characters/idle.png")
+    self.animation.grid = anim8.newGrid(64,64, self.animation.texture:getWidth(), self.animation.texture:getHeight())
+    self.animations = {}
+    self.animations.idle = anim8.newAnimation(self.animation.grid("1-4", 1), 0.1)
+    self.currentAnimation = self.animations.idle
 end
 
 function Player:draw()
-    love.graphics.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
+    --love.graphics.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
+    self.currentAnimation:draw(self.animation.texture, self.x - self.width / 2, self.y - self.height / 2)
 end
 
 function Player:update(dt)
+    self.currentAnimation:update(dt)
     self:decreaseCoyoteTimer(dt)
     self:syncPhysics()
     self:move(dt)

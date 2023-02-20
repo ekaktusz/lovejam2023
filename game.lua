@@ -43,7 +43,7 @@ function Game:update(dt)
     local dy = self.player.y - cy
     self.camera:setPosition(cx + dx * dt * 10, cy + dy * dt * 10)
 
-    RainDrop.generateRain(cx,cy, self.world)
+    --RainDrop.generateRain(cx,cy, self.world)
     RainDrop.updateRain()
 
     self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
