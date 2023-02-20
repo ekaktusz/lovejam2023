@@ -1,4 +1,4 @@
-local Game = {}
+ Game = {}
 
 local sti = require("vendor.sti")
 local gamera = require("vendor.gamera.gamera")
@@ -11,7 +11,7 @@ local Player = require("player")
 
 function Game:load()
     self.map = sti("assets/maps/testmap.lua", {"box2d"})
-    self.world = love.physics.newWorld(0.0, 500)
+    self.world = love.physics.newWorld(0.0, 100)
     self.world:setCallbacks(Game.beginContact, Game.endContact)
     self.map:box2d_init(self.world)
     self.map.layers.solid.visible = false
@@ -43,7 +43,7 @@ function Game:update(dt)
     local dy = self.player.y - cy
     self.camera:setPosition(cx + dx * dt * 10, cy + dy * dt * 10)
 
-    --RainDrop.generateRain(cx,cy, self.world)
+    RainDrop.generateRain(cx,cy, self.world)
     RainDrop.updateRain()
 
     self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
@@ -91,6 +91,7 @@ end
 
 function Game.beginContact(a, b, collision)
     Game.player:beginContact(a, b, collision)
+    RainDrop.beginContact(a, b, collision)
 end
 
 function Game.endContact(a, b, collision)

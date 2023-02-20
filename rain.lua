@@ -23,7 +23,7 @@ end
 
 function RainDrop.generateRain(cx, cy, world)
 
-    for i = 1, 2 do
+    for i = 1, 10 do
         local x = math.random(1, 640)
         local y = 0
         local raindrop = RainDrop(x, y, world)
@@ -55,11 +55,18 @@ function RainDrop.drawRain()
     end
 end
 
-
 function RainDrop:draw()
     love.graphics.setColor(0, 1, 1)
     love.graphics.circle( "fill", self.x, self.y, 2 )
     love.graphics.setColor(1, 1, 1)
 end
+
+function RainDrop.beginContact(a, b, collision)
+    for i,instance in ipairs(activeRaindrops) do
+       if a == instance.physics.fixture or b == instance.physics.fixture then
+        instance:remove()
+       end
+    end
+ end
 
 return RainDrop
