@@ -10,13 +10,13 @@ local RainDrop = require("rain")
 local Player = require("player")
 
 function Game:load()
-    self.map = sti("assets/maps/testmap.lua", {"box2d"})
+    self.map = sti("assets/maps/testmap2.lua", {"box2d"})
     self.world = love.physics.newWorld(0.0, 100)
     self.world:setCallbacks(Game.beginContact, Game.endContact)
     self.map:box2d_init(self.world)
     self.map.layers.solid.visible = false
     self.player = Player(self.world)
-    self.camera = gamera.new(0,0,640,480)
+    self.camera = gamera.new(0,0,love.graphics.getWidth(),love.graphics.getHeight())
     self.camera:setPosition(self.player.x, self.player.x)
     self.camera:setScale(2.0)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
@@ -44,7 +44,7 @@ function Game:update(dt)
     self.camera:setPosition(cx + dx * dt * 10, cy + dy * dt * 10)
 
     RainDrop.generateRain(cx,cy, self.world)
-    RainDrop.updateRain()
+    RainDrop.updateRain(dt)
 
     self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
 
@@ -71,8 +71,8 @@ function Game.drawGame(l, t, w, h)
     
 
     --love.graphics.draw(Game.background)
-    Game.map:drawLayer(Game.map.layers.tile_layer1)
     Game.map:drawLayer(Game.map.layers.tile_layer2)
+    Game.map:drawLayer(Game.map.layers.tile_layer1)
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
 

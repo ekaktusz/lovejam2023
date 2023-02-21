@@ -252,6 +252,10 @@ function Animation:pauseAtEnd()
   self:pause()
 end
 
+function Animation:isOnEnd()
+  return self.position == #self.frames
+end
+
 function Animation:pauseAtStart()
   self.position = 1
   self.timer = 0

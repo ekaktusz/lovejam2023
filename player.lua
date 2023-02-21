@@ -25,31 +25,50 @@ function Player:new(world)
 
     self.fireStrength = 0.5 -- value between 0 and 1, showing the strength of fire
 
+    -- init physics
     self.physics = {}
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+   
 
-    self.animation = {}
-    self.animation.texture = love.graphics.newImage("assets/textures/characters/idle.png")
-    self.animation.grid = anim8.newGrid(64,64, self.animation.texture:getWidth(), self.animation.texture:getHeight())
+    -- init animations
     self.animations = {}
-    self.animations.idle = anim8.newAnimation(self.animation.grid("1-4", 1), 0.1)
+
+    self.animations.idle = {}
+    self.animations.idle.texture = love.graphics.newImage("assets/textures/characters/idle.png")
+    self.animations.idle.grid = anim8.newGrid(64,64, self.animations.idle.texture:getWidth(), self.animations.idle.texture:getHeight())
+    self.animations.idle.animation = anim8.newAnimation(self.animations.idle.grid("1-8", 1), 0.1)
+
+    self.animations.running = {}
+    self.animations.running.texture = love.graphics.newImage("assets/textures/characters/running.png")
+    self.animations.running.grid = anim8.newGrid(64,64, self.animations.running.texture:getWidth(), self.animations.running.texture:getHeight())
+    self.animations.running.animation = anim8.newAnimation(self.animations.running.grid("5-19", 1), 0.075)
+
     self.currentAnimation = self.animations.idle
 end
 
 function Player:draw()
     --love.graphics.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
-    self.currentAnimation:draw(self.animation.texture, self.x - self.width / 2, self.y - self.height / 2)
+    self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x - self.width / 2, self.y - self.height / 2, 0, 1, 1)
 end
 
 function Player:update(dt)
-    self.currentAnimation:update(dt)
+    self.currentAnimation.animation:update(dt)
     self:decreaseCoyoteTimer(dt)
     self:syncPhysics()
     self:move(dt)
     self:applyGravity(dt)
+    self:updateAnimationState()
+end
+
+function Player:updateAnimationState()
+    if self.dx ~= 0 then
+        self.currentAnimation = self.animations.running
+    else
+        self.currentAnimation = self.animations.idle
+    end
 end
 
 function Player:decreaseCoyoteTimer(dt)
