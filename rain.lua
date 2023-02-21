@@ -15,6 +15,7 @@ function RainDrop:new(x,y,world)
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.shape = love.physics.newCircleShape(2)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+    self.physics.fixture:setSensor(true)
     self.physics.body:setMass(1)
 end
 

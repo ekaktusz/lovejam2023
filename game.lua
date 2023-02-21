@@ -4,12 +4,18 @@ local sti = require("vendor.sti")
 local gamera = require("vendor.gamera.gamera")
 local Lighter = require("vendor.lighter")
 local Parallax = require ("vendor.parallax.parallax")
+local GameState = require("vendor.hump.gamestate")
+local Console = require("vendor.console.console")
 
 local RainDrop = require("rain")
 
 local Player = require("player")
 
-function Game:load()
+
+Console.ENV.Game = Game -- make game parameters accessible from the game console
+
+
+function Game:enter()
     self.map = sti("assets/maps/testmap2.lua", {"box2d"})
     self.world = love.physics.newWorld(0.0, 100)
     self.world:setCallbacks(Game.beginContact, Game.endContact)
@@ -34,6 +40,8 @@ function Game:load()
 end
 
 function Game:update(dt)
+    
+    if Console.isEnabled() then return end
 
     self.world:update(dt)
     self.player:update(dt)
@@ -87,6 +95,7 @@ end
 
 function Game:draw()
     self.camera:draw(Game.drawGame)
+    Console:draw()
 end
 
 function Game.beginContact(a, b, collision)
@@ -99,8 +108,19 @@ function Game.endContact(a, b, collision)
 end
 
 function Game:keypressed(key, scancode, isrepeat)
+    Console.keypressed(key, scancode, isrepeat)
+    if Console.isEnabled() then return end
+
     Game.player:keypressed(key)
+    if key == "escape" then
+        GameState.push(Pause)
+    end
 end
+
+--function love.textinput(text)
+--    Console.textinput(text)
+--end
+
 
 
 return Game

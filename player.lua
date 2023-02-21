@@ -2,6 +2,14 @@ local Player = Object:extend()
 
 local anim8 = require("vendor.anim8.anim8")
 
+-- https://aurelienribon.wordpress.com/2011/07/01/box2d-tutorial-collision-filtering/
+CATEGORY_PLAYER = 0x0001
+CATEGORY_RAINDROP = 0x0002
+MASK_PLAYER = bit.bnot(CATEGORY_PLAYER)
+MASK_RAINDROP = bit.bnot(CATEGORY_RAINDROP)
+GROUP_PLAYER = -1
+GROUP_RAINDROP = -2
+
 function Player:new(world)
     self.x = 100
     self.y = 0
@@ -32,6 +40,8 @@ function Player:new(world)
     --self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.shape = love.physics.newCircleShape(32)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+
+    --self.physics.fixture:setFilterData()
 
     self.direction = "right"
    
