@@ -89,7 +89,6 @@ function RainDrop.beginContact(a, b, collision)
 end
 
 function RainDrop:spawnSplash()
-    print("asd")
     local splash = {}
     splash.animation = anim8.newAnimation(splashGrid("1-6", 1), 0.1)
     splash.x = self.x

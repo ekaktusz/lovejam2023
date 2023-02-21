@@ -29,8 +29,11 @@ function Player:new(world)
     self.physics = {}
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(true)
-    self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
+    --self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
+    self.physics.shape = love.physics.newCircleShape(32)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
+
+    self.direction = "right"
    
 
     -- init animations
@@ -51,7 +54,11 @@ end
 
 function Player:draw()
     --love.graphics.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
-    self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x - self.width / 2, self.y - self.height / 2, 0, 1, 1)
+    if self.direction == "right" then
+        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x - self.width / 2, self.y - self.height / 2, 0, 1, 1)
+    elseif self.direction == "left" then
+        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x + self.width / 2, self.y - self.height / 2, 0, -1, 1)
+    end
 end
 
 function Player:update(dt)
@@ -61,6 +68,15 @@ function Player:update(dt)
     self:move(dt)
     self:applyGravity(dt)
     self:updateAnimationState()
+    self:updateDirection()
+end
+
+function Player:updateDirection()
+    if self.dx > 0 then
+        self.direction = "right"
+    elseif self.dx < 0 then
+        self.direction = "left"
+    end
 end
 
 function Player:updateAnimationState()
