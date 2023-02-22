@@ -6,7 +6,7 @@ local activeRaindrops = {}
 local activeRainSplashes = {}
 
 local splashTexture = love.graphics.newImage("assets/textures/eso_csopp_2.png")
-local splashGrid = anim8.newGrid(8,8, splashTexture:getWidth(), splashTexture:getHeight())
+local splashGrid = anim8.newGrid(16,16, splashTexture:getWidth(), splashTexture:getHeight())
 
 function RainDrop:new(x,y,world)
     self.x = x
@@ -15,10 +15,10 @@ function RainDrop:new(x,y,world)
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.shape = love.physics.newCircleShape(2)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
-    self.physics.fixture:setSensor(true)
+    --self.physics.fixture:setSensor(true)
 
     -- do not collide with category 2 objects (i.e. player)
-    self.physics.fixture:setMask(2, 2)
+     self.physics.fixture:setMask(2, 2)
     
     self.physics.body:setMass(1)
 end
@@ -96,8 +96,8 @@ end
 function RainDrop:spawnSplash()
     local splash = {}
     splash.animation = anim8.newAnimation(splashGrid("1-6", 1), 0.1)
-    splash.x = self.x
-    splash.y = self.y
+    splash.x = self.x 
+    splash.y = self.y- math.random(1, 16)
     table.insert(activeRainSplashes, splash)
 end
 

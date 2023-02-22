@@ -8,6 +8,7 @@ local GameState = require("vendor.hump.gamestate")
 local Console = require("vendor.console.console")
 
 local RainDrop = require("rain")
+local Amphora = require("amphora")
 
 local Player = require("player")
 
@@ -24,7 +25,7 @@ function Game:enter()
     self.player = Player(self.world)
     self.camera = gamera.new(0,0,love.graphics.getWidth(),love.graphics.getHeight())
     self.camera:setPosition(self.player.x, self.player.x)
-    self.camera:setScale(2.0)
+    self.camera:setScale(1.5)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
     self.lighter = Lighter()
     self.playerLight = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
@@ -42,6 +43,8 @@ function Game:enter()
     self.rainAudio:setLooping(true)
     self.rainAudio:setVolume(0.5)
     self.rainAudio:play()
+    
+    Amphora.spawnAmphoras()
 end
 
 function Game:update(dt)
@@ -82,12 +85,14 @@ function Game.drawGame(l, t, w, h)
         love.graphics.draw(Game.background_p2, Game.camera:toWorld(0, 0), 0 , 2, 2)
     end)
     
-    -- draw rain before player
-    RainDrop.drawRain()
 
     --love.graphics.draw(Game.background)
     Game.map:drawLayer(Game.map.layers.tile_layer2)
     Game.map:drawLayer(Game.map.layers.tile_layer1)
+
+     -- draw rain before player
+    RainDrop.drawRain()
+    Amphora.drawAll()
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
 
@@ -105,8 +110,12 @@ function Game:draw()
 end
 
 function Game.beginContact(a, b, collision)
-    Game.player:beginContact(a, b, collision)
+    
     RainDrop.beginContact(a, b, collision)
+    if Amphora.beginContact(a, b, collision) then return end
+    Game.player:beginContact(a, b, collision)
+    
+    
 end
 
 function Game.endContact(a, b, collision)

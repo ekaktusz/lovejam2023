@@ -18,11 +18,11 @@ function Player:new(world)
     self.width = 64
     self.height = 64
 
-    self.acceleration = 4000
-    self.friction = 3500
-    self.maxSpeed = 200
-    self.gravity = 1500
-    self.jumpSpeed = -500
+    self.acceleration = 4000 *1.5
+    self.friction = 3500 *1.5
+    self.maxSpeed = 200 *1.5
+    self.gravity = 1500 *1.5
+    self.jumpSpeed = -500 *1.5
 
     self.triggerFallSplash = false
 
@@ -38,7 +38,7 @@ function Player:new(world)
     -- init physics
     self.physics = {}
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
-    self.physics.body:setFixedRotation(true)
+    self.physics.body:setFixedRotation(false)
     --self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.shape = love.physics.newCircleShape(32)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)

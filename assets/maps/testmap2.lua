@@ -9,8 +9,8 @@ return {
   height = 100,
   tilewidth = 64,
   tileheight = 64,
-  nextlayerid = 6,
-  nextobjectid = 8,
+  nextlayerid = 10,
+  nextobjectid = 18,
   properties = {},
   tilesets = {
     {
@@ -44,6 +44,62 @@ return {
     }
   },
   layers = {
+    {
+      type = "objectgroup",
+      draworder = "topdown",
+      id = 9,
+      name = "amphoras",
+      class = "",
+      visible = true,
+      opacity = 1,
+      offsetx = 0,
+      offsety = 0,
+      parallaxx = 1,
+      parallaxy = 1,
+      tintcolor = { 255, 0, 0 },
+      properties = {},
+      objects = {
+        {
+          id = 15,
+          name = "amphora",
+          class = "",
+          shape = "point",
+          x = 384,
+          y = 832,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 16,
+          name = "amphora",
+          class = "",
+          shape = "point",
+          x = 512,
+          y = 832,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        },
+        {
+          id = 17,
+          name = "amphora",
+          class = "",
+          shape = "point",
+          x = 768,
+          y = 832,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
+    },
     {
       type = "tilelayer",
       x = 0,
