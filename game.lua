@@ -37,6 +37,11 @@ function Game:enter()
 
     self.background_p1 = love.graphics.newImage("assets/imgs/ParallaxBackground/DownLayer.png")
     self.background_p2 = love.graphics.newImage("assets/imgs/ParallaxBackground/MiddleLayer.png")
+
+    self.rainAudio = love.audio.newSource("assets/audio/rain/rain.wav", "stream")
+    self.rainAudio:setLooping(true)
+    self.rainAudio:setVolume(0.5)
+    self.rainAudio:play()
 end
 
 function Game:update(dt)

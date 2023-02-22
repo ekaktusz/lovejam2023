@@ -46,6 +46,11 @@ function Player:new(world)
     -- set caterogy so rain doesn't collide
     self.physics.fixture:setCategory(2, 2)
 
+    -- audio
+    self.fireAudio = love.audio.newSource("assets/audio/fire/fire.wav", "stream")
+    self.fireAudio:setLooping(true)
+    self.fireAudio:play()
+
     self.direction = "right"
 
     -- init animations
