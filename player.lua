@@ -62,6 +62,11 @@ function Player:new(world)
         self.animations.running.animation:gotoFrame(5)
     end)
 
+    self.animations.jump = {}
+    self.animations.jump.texture = love.graphics.newImage("assets/textures/characters/jump.png")
+    self.animations.jump.grid = anim8.newGrid(64,64, self.animations.jump.texture:getWidth(), self.animations.jump.texture:getHeight())
+    self.animations.jump.animation = anim8.newAnimation(self.animations.jump.grid("1-12", 1), 0.075)
+
     self.currentAnimation = self.animations.idle
 end
 
@@ -95,6 +100,8 @@ end
 function Player:updateAnimationState()
     if self.dx ~= 0 then
         self.currentAnimation = self.animations.running
+    elseif self.dy ~= 0 then
+        self.currentAnimation = self.animations.jump
     else
         self.currentAnimation = self.animations.idle
     end
