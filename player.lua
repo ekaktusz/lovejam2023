@@ -124,7 +124,6 @@ function Player:isFalling()
 end
 
 function Player:updateAnimationState()
-    print(self.dy)
     if self.dx ~= 0 then
         self.currentAnimation = self.animations.running
     elseif self.dy ~= 0 then
