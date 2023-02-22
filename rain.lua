@@ -16,6 +16,10 @@ function RainDrop:new(x,y,world)
     self.physics.shape = love.physics.newCircleShape(2)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.fixture:setSensor(true)
+
+    -- do not collide with category 2 objects (i.e. player)
+    self.physics.fixture:setMask(2, 2)
+    
     self.physics.body:setMass(1)
 end
 

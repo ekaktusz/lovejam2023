@@ -41,7 +41,8 @@ function Player:new(world)
     self.physics.shape = love.physics.newCircleShape(32)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
 
-    --self.physics.fixture:setFilterData()
+    -- set caterogy so rain doesn't collide
+    self.physics.fixture:setCategory(2, 2)
 
     self.direction = "right"
    

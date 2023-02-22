@@ -77,6 +77,8 @@ function Game.drawGame(l, t, w, h)
         love.graphics.draw(Game.background_p2, Game.camera:toWorld(0, 0), 0 , 2, 2)
     end)
     
+    -- draw rain before player
+    RainDrop.drawRain()
 
     --love.graphics.draw(Game.background)
     Game.map:drawLayer(Game.map.layers.tile_layer2)
@@ -84,7 +86,6 @@ function Game.drawGame(l, t, w, h)
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
 
-    RainDrop.drawRain()
     
     -- This is for lights, should be at the end
     love.graphics.setBlendMode("multiply", "premultiplied")
