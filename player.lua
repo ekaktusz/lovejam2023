@@ -24,6 +24,8 @@ function Player:new(world)
     self.gravity = 1500
     self.jumpSpeed = -500
 
+    self.currJump = false
+
     self.coyoteTimer = 0
     self.coyoteDuration = 0.1
 
@@ -67,6 +69,20 @@ function Player:new(world)
     self.animations.jump.grid = anim8.newGrid(64,64, self.animations.jump.texture:getWidth(), self.animations.jump.texture:getHeight())
     self.animations.jump.animation = anim8.newAnimation(self.animations.jump.grid("1-12", 1), 0.075)
 
+    self.animations.falling = {}
+    self.animations.falling.texture = love.graphics.newImage("assets/textures/characters/falling.png")
+    self.animations.falling.grid = anim8.newGrid(64,64, self.animations.falling.texture:getWidth(), self.animations.falling.texture:getHeight())
+    self.animations.falling.animation = anim8.newAnimation(self.animations.falling.grid("4-12", 1), 0.075, function ()
+        self.animations.falling.animation:gotoFrame(4)
+    end)
+
+    self.animations.afterfalling = {}
+    self.animations.afterfalling.texture = love.graphics.newImage("assets/textures/characters/falling.png")
+    self.animations.afterfalling.grid = anim8.newGrid(64,64, self.animations.falling.texture:getWidth(), self.animations.falling.texture:getHeight())
+    self.animations.afterfalling.animation = anim8.newAnimation(self.animations.falling.grid("20-30", 1), 0.075, function ()
+        self.currJump = false
+    end)
+
     self.currentAnimation = self.animations.idle
 end
 
@@ -97,13 +113,26 @@ function Player:updateDirection()
     end
 end
 
+function Player:isJumping()
+    return self.dy > 500
+end
+
 function Player:updateAnimationState()
     if self.dx ~= 0 then
         self.currentAnimation = self.animations.running
     elseif self.dy ~= 0 then
-        self.currentAnimation = self.animations.jump
+        if self:isJumping() then
+            self.currJump = true
+            self.currentAnimation = self.animations.falling
+        else
+            self.currentAnimation = self.animations.jump
+        end
     else
-        self.currentAnimation = self.animations.idle
+        if self.currJump then
+            self.currentAnimation = self.animations.afterfalling
+        else
+            self.currentAnimation = self.animations.idle
+        end
     end
 end
 
