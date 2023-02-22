@@ -58,7 +58,9 @@ function Player:new(world)
     self.animations.running = {}
     self.animations.running.texture = love.graphics.newImage("assets/textures/characters/running.png")
     self.animations.running.grid = anim8.newGrid(64,64, self.animations.running.texture:getWidth(), self.animations.running.texture:getHeight())
-    self.animations.running.animation = anim8.newAnimation(self.animations.running.grid("5-19", 1), 0.075)
+    self.animations.running.animation = anim8.newAnimation(self.animations.running.grid("1-19", 1), 0.075, function ()
+        self.animations.running.animation:gotoFrame(5)
+    end)
 
     self.currentAnimation = self.animations.idle
 end
