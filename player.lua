@@ -51,6 +51,8 @@ function Player:new(world)
     self.fireAudio:setLooping(true)
     self.fireAudio:play()
 
+    self.whooshAudio = love.audio.newSource("assets/audio/fire/whoosh.wav", "stream")
+
     self.direction = "right"
 
     -- init animations
@@ -118,10 +120,11 @@ function Player:updateDirection()
 end
 
 function Player:isFalling()
-    return self.dy > 500
+    return self.dy > 1000
 end
 
 function Player:updateAnimationState()
+    print(self.dy)
     if self.dx ~= 0 then
         self.currentAnimation = self.animations.running
     elseif self.dy ~= 0 then
@@ -133,6 +136,7 @@ function Player:updateAnimationState()
         end
     else
         if self.triggerFallSplash then
+            self.whooshAudio:play()
             self.currentAnimation = self.animations.afterfalling
         else
             self.currentAnimation = self.animations.idle
