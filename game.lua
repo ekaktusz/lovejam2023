@@ -96,6 +96,9 @@ function Game.drawGame(l, t, w, h)
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
 
+
+    -- Comment out for debugging
+    -- Game:drawBox2dWorld()
     
     -- This is for lights, should be at the end
     love.graphics.setBlendMode("multiply", "premultiplied")
@@ -129,6 +132,24 @@ function Game:keypressed(key, scancode, isrepeat)
     Game.player:keypressed(key)
     if key == "escape" then
         GameState.push(Pause)
+    end
+end
+
+-- for debugging
+function Game:drawBox2dWorld()
+    for _, body in pairs(self.world:getBodies()) do
+        for _, fixture in pairs(body:getFixtures()) do
+            local shape = fixture:getShape()
+    
+            if shape:typeOf("CircleShape") then
+                local cx, cy = body:getWorldPoints(shape:getPoint())
+                love.graphics.circle("line", cx, cy, shape:getRadius())
+            elseif shape:typeOf("PolygonShape") then
+                love.graphics.polygon("line", body:getWorldPoints(shape:getPoints()))
+            else
+                love.graphics.line(body:getWorldPoints(shape:getPoints()))
+            end
+        end
     end
 end
 
