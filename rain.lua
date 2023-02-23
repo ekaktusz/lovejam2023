@@ -18,7 +18,7 @@ function RainDrop:new(x,y,world)
     --self.physics.fixture:setSensor(true)
 
     -- do not collide with category 2 objects (i.e. player)
-     self.physics.fixture:setMask(2, 2)
+     -- self.physics.fixture:setMask(2, 2)
     
     self.physics.body:setMass(1)
 end
@@ -89,6 +89,10 @@ function RainDrop.beginContact(a, b, collision)
        if a == instance.physics.fixture or b == instance.physics.fixture then
         instance:spawnSplash()
         instance:remove()
+        if a == Game.player.physics.fixture or b == Game.player.physics.fixture then
+            Game.player.fireStrength = Game.player.fireStrength - 0.01
+            return true
+        end
        end
     end
 end

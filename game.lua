@@ -9,6 +9,7 @@ local Console = require("vendor.console.console")
 
 local RainDrop = require("rain")
 local Amphora = require("amphora")
+local Grass = require("grass")
 
 local Player = require("player")
 
@@ -17,7 +18,7 @@ Console.ENV.Game = Game -- make game parameters accessible from the game console
 
 
 function Game:enter()
-    self.map = sti("assets/maps/testmap2.lua", {"box2d"})
+    self.map = sti("assets/maps/tuzkaksi.lua", {"box2d"})
     self.world = love.physics.newWorld(0.0, 100)
     self.world:setCallbacks(Game.beginContact, Game.endContact)
     self.map:box2d_init(self.world)
@@ -25,7 +26,7 @@ function Game:enter()
     self.player = Player(self.world)
     self.camera = gamera.new(0,0,love.graphics.getWidth(),love.graphics.getHeight())
     self.camera:setPosition(self.player.x, self.player.x)
-    self.camera:setScale(1.5)
+    self.camera:setScale(2)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
     self.lighter = Lighter()
     self.playerLight = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
@@ -45,6 +46,7 @@ function Game:enter()
     self.rainAudio:play()
     
     Amphora.spawnAmphoras()
+    Grass.spawnGrass()
 end
 
 function Game:update(dt)
@@ -93,9 +95,11 @@ function Game.drawGame(l, t, w, h)
      -- draw rain before player
     RainDrop.drawRain()
     Amphora.drawAll()
+    Grass.drawAll()
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
-
+    love.graphics.print("Score: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
+    love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
 
     -- Comment out for debugging
     -- Game:drawBox2dWorld()
@@ -113,12 +117,10 @@ function Game:draw()
 end
 
 function Game.beginContact(a, b, collision)
-    
-    RainDrop.beginContact(a, b, collision)
+    if RainDrop.beginContact(a, b, collision) then return end
     if Amphora.beginContact(a, b, collision) then return end
+    if Grass.beginContact(a, b, collision) then return end
     Game.player:beginContact(a, b, collision)
-    
-    
 end
 
 function Game.endContact(a, b, collision)

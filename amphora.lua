@@ -38,6 +38,7 @@ function Amphora.beginContact(a, b, collision)
         if (a == amphora.physics.fixture and b == Game.player.physics.fixture) or (b == amphora.physics.fixture and a == Game.player.physics.fixture) then
             amphora.physics.body:destroy()
             table.remove(activeAmphoras, i)
+            Game.player.score = Game.player.score + 1
             return true
         end
     end

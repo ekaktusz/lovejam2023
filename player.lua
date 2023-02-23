@@ -22,7 +22,7 @@ function Player:new(world)
     self.friction = 3500 *1.5
     self.maxSpeed = 200 *1.5
     self.gravity = 1500 *1.5
-    self.jumpSpeed = -500 *1.5
+    self.jumpSpeed = -500 *2
 
     self.triggerFallSplash = false
 
@@ -34,6 +34,7 @@ function Player:new(world)
     self.doubleJumpModifier = 0.8
 
     self.fireStrength = 0.5 -- value between 0 and 1, showing the strength of fire
+    self.score = 0
 
     -- init physics
     self.physics = {}
@@ -42,9 +43,8 @@ function Player:new(world)
     --self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.shape = love.physics.newCircleShape(32)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
-
     -- set caterogy so rain doesn't collide
-    self.physics.fixture:setCategory(2, 2)
+    -- self.physics.fixture:setCategory(2, 2)
 
     -- audio
     self.fireAudio = love.audio.newSource("assets/audio/fire/fire.wav", "stream")
