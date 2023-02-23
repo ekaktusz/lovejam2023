@@ -99,7 +99,7 @@ function Game.drawGame(l, t, w, h)
     love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
 
     -- Comment out for debugging
-    -- Game:drawBox2dWorld()
+     Game:drawBox2dWorld()
     
     -- This is for lights, should be at the end
     love.graphics.setBlendMode("multiply", "premultiplied")
