@@ -24,7 +24,7 @@ return {
       columns = 10,
       image = "../base_tiles_XL.png",
       imagewidth = 640,
-      imageheight = 1380,
+      imageheight = 1900,
       objectalignment = "unspecified",
       tilerendersize = "tile",
       fillmode = "stretch",
@@ -39,7 +39,7 @@ return {
       },
       properties = {},
       wangsets = {},
-      tilecount = 210,
+      tilecount = 290,
       tiles = {}
     }
   },

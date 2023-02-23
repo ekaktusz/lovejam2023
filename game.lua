@@ -18,7 +18,7 @@ Console.ENV.Game = Game -- make game parameters accessible from the game console
 
 
 function Game:enter()
-    self.map = sti("assets/maps/tuzkaksi.lua", {"box2d"})
+    self.map = sti("assets/maps/testmap2.lua", {"box2d"})
     self.world = love.physics.newWorld(0.0, 100)
     self.world:setCallbacks(Game.beginContact, Game.endContact)
     self.map:box2d_init(self.world)
@@ -36,9 +36,6 @@ function Game:enter()
         parallax_1 = Parallax.new(self.camera, 1.25),
         parallax_2 = Parallax.new(self.camera, 1)
     }
-
-    self.background_p1 = love.graphics.newImage("assets/imgs/ParallaxBackground/DownLayer.png")
-    self.background_p2 = love.graphics.newImage("assets/imgs/ParallaxBackground/MiddleLayer.png")
 
     self.rainAudio = love.audio.newSource("assets/audio/rain/rain.wav", "stream")
     self.rainAudio:setLooping(true)
@@ -75,22 +72,17 @@ end
 
 function Game.drawGame(l, t, w, h)
 
-    Game.parallaxLayers.parallax_1:draw(function()
-        -- Draw something distant from the camera here.
-        local wx, wy = Game.camera:toWorld(0, 0)
-        love.graphics.draw(Game.background_p1, wx, wy, 0, 2, 2)
-    end)
-
-    
-    Game.parallaxLayers.parallax_2:draw(function()
-        -- Draw something distant from the camera here.
-        love.graphics.draw(Game.background_p2, Game.camera:toWorld(0, 0), 0 , 2, 2)
-    end)
+    local wx, wy = Game.camera:toWorld(0, 0)
+    love.graphics.draw(Game.background, wx, wy, 0, 1.2, 1.2)
     
 
     --love.graphics.draw(Game.background)
-    Game.map:drawLayer(Game.map.layers.tile_layer2)
-    Game.map:drawLayer(Game.map.layers.tile_layer1)
+
+    for i,layer in ipairs(Game.map.layers) do
+        if layer.objects == nil then
+            Game.map:drawLayer(layer)
+        end
+    end
 
      -- draw rain before player
     RainDrop.drawRain()
@@ -98,7 +90,7 @@ function Game.drawGame(l, t, w, h)
     Grass.drawAll()
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
-    love.graphics.print("Score: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
+    love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
     love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
 
     -- Comment out for debugging
