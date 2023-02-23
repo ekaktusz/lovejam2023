@@ -10,6 +10,7 @@ local Console = require("vendor.console.console")
 local RainDrop = require("rain")
 local Amphora = require("amphora")
 local Grass = require("grass")
+local Checkpoint = require("checkpoint")
 
 local Player = require("player")
 
@@ -44,6 +45,7 @@ function Game:enter()
     
     Amphora.spawnAmphoras()
     Grass.spawnGrass()
+    Checkpoint.spawnCheckpoints()
 end
 
 function Game:update(dt)
@@ -60,6 +62,8 @@ function Game:update(dt)
 
     RainDrop.generateRain(cx,cy, self.world)
     RainDrop.updateRain(dt)
+
+    Checkpoint.updateAll(dt)
 
     self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
 
@@ -88,6 +92,7 @@ function Game.drawGame(l, t, w, h)
     RainDrop.drawRain()
     Amphora.drawAll()
     Grass.drawAll()
+    Checkpoint.drawAll()
     Game.player:draw()
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
     love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
@@ -109,9 +114,11 @@ function Game:draw()
 end
 
 function Game.beginContact(a, b, collision)
+    if Grass.beginContact(a, b, collision) then return end
     if RainDrop.beginContact(a, b, collision) then return end
     if Amphora.beginContact(a, b, collision) then return end
-    if Grass.beginContact(a, b, collision) then return end
+    if Checkpoint.beginContact(a, b, collision) then return end
+    
     Game.player:beginContact(a, b, collision)
 end
 

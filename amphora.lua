@@ -7,7 +7,7 @@ function Amphora:new(x, y)
     self.y = y or 0
     self.width = 64
     self.height = 64
-    self.sprite = love.graphics.newImage("assets/imgs/amphora1.png")
+    self.sprite = love.graphics.newImage("assets/imgs/tiles/tile (120).png")
 
     self.physics = {}
     self.physics.body = love.physics.newBody(Game.world, self.x, self.y, "static")

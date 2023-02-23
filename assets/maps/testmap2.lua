@@ -9,8 +9,8 @@ return {
   height = 100,
   tilewidth = 64,
   tileheight = 64,
-  nextlayerid = 12,
-  nextobjectid = 29,
+  nextlayerid = 13,
+  nextobjectid = 30,
   properties = {},
   tilesets = {
     {
@@ -495,7 +495,7 @@ return {
       type = "objectgroup",
       draworder = "topdown",
       id = 11,
-      name = "checkpoint",
+      name = "checkpoints",
       class = "",
       visible = true,
       opacity = 1,
@@ -504,7 +504,21 @@ return {
       parallaxx = 1,
       parallaxy = 1,
       properties = {},
-      objects = {}
+      objects = {
+        {
+          id = 29,
+          name = "checkpoints",
+          class = "",
+          shape = "point",
+          x = 448,
+          y = 704,
+          width = 0,
+          height = 0,
+          rotation = 0,
+          visible = true,
+          properties = {}
+        }
+      }
     }
   }
 }

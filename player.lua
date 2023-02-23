@@ -41,7 +41,7 @@ function Player:new(world)
     self.physics.body = love.physics.newBody(world, self.x, self.y, "dynamic")
     self.physics.body:setFixedRotation(false)
     --self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
-    self.physics.shape = love.physics.newCircleShape(32)
+    self.physics.shape = love.physics.newCircleShape(16)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     -- set caterogy so rain doesn't collide
     -- self.physics.fixture:setCategory(2, 2)

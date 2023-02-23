@@ -37,7 +37,7 @@ end
 
 function Grass.beginContact(a, b, collision)
     for i,grass in ipairs(activeGrass) do
-        if (a == grass.physics.fixture and b == Game.player.physics.fixture) or (b == grass.physics.fixture and a == grass.player.physics.fixture) then
+        if (a == grass.physics.fixture and b == Game.player.physics.fixture) or (b == grass.physics.fixture and a == Game.player.physics.fixture) then
             grass.physics.body:destroy()
             Game.player.fireStrength = Game.player.fireStrength + 0.1
             table.remove(activeGrass, i)
