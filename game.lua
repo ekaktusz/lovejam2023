@@ -13,6 +13,7 @@ local Grass = require("grass")
 local Checkpoint = require("checkpoint")
 
 local Player = require("player")
+local Powerlevelbar = require("powerlevelbar")
 
 
 Console.ENV.Game = Game -- make game parameters accessible from the game console
@@ -42,6 +43,8 @@ function Game:enter()
     self.rainAudio:setLooping(true)
     self.rainAudio:setVolume(0.5)
     self.rainAudio:play()
+
+    self.powerLevelBar = Powerlevelbar()
     
     Amphora.spawnAmphoras()
     Grass.spawnGrass()
@@ -67,6 +70,8 @@ function Game:update(dt)
 
     self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
 
+    self.powerLevelBar:setLevel(self.player.fireStrength)
+
     -- This is for lights, should be at the end
     love.graphics.setCanvas({ Game.lightCanvas, stencil = true})
     love.graphics.clear(0.4, 0.4, 0.4) -- Global illumination level
@@ -78,7 +83,6 @@ function Game.drawGame(l, t, w, h)
 
     local wx, wy = Game.camera:toWorld(0, 0)
     love.graphics.draw(Game.background, wx, wy, 0, 1.2, 1.2)
-    
 
     --love.graphics.draw(Game.background)
 
@@ -94,9 +98,6 @@ function Game.drawGame(l, t, w, h)
     Grass.drawAll()
     Checkpoint.drawAll()
     Game.player:draw()
-    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
-    love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
-    love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
 
     -- Comment out for debugging
     -- Game:drawBox2dWorld()
@@ -105,6 +106,13 @@ function Game.drawGame(l, t, w, h)
     love.graphics.setBlendMode("multiply", "premultiplied")
     love.graphics.draw(Game.lightCanvas)
     love.graphics.setBlendMode("alpha")
+
+
+    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
+    love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
+    love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
+
+    Game.powerLevelBar:draw(Game.camera:toWorld(love.graphics.getWidth() /2 - Game.powerLevelBar.w, 10))
 end
   
 
