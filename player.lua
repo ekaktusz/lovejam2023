@@ -18,6 +18,8 @@ function Player:new(world)
     self.width = 64
     self.height = 64
 
+    --self.madeFirstMove = false
+
     self.lastCheckpoint = {}
     self.lastCheckpoint.x = 100
     self.lastCheckpoint.y = 0
@@ -215,6 +217,19 @@ function Player:keypressed(key)
     if key == "w" or key == "up" then
         self:jump()
     end
+
+    --if key == "e" then
+    --    self:dash()
+    --end
+end
+
+function Player:dash()
+    if self.direction == "right" then
+        self.dx = 1000
+    elseif self.direction == "left" then
+        self.dx = -1000
+    end
+    self.fireStrength = self.fireStrength - 0.1
 end
 
 function Player:jump()

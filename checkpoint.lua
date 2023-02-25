@@ -36,6 +36,8 @@ function Checkpoint:new(x, y)
 
     self.whooshAudio = love.audio.newSource("assets/audio/fire/whoosh-2.wav", "stream")
 
+    self.checkpointLight = Game.lighter:addLight(self.x, self.y, 0, 173/255, 216/266, 230/255, 1)
+
     self.currentAnimation = self.animations.lit
 end
 
@@ -54,6 +56,8 @@ function Checkpoint:update(dt)
         self.currentAnimation = self.animations.idle
         self.state = "burning"
     end
+
+    Game.lighter:updateLight(self.checkpointLight, self.x, self.y, 300 + math.random(-5, 5))
 
     self.currentAnimation.animation:update(dt)
 end

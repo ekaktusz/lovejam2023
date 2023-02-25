@@ -33,7 +33,9 @@ function Game:enter()
     self.camera:setScale(2)
     self.background = love.graphics.newImage("assets/imgs/background2.png")
     self.lighter = Lighter()
+    --self.playerLight3 = self.lighter:addLight(0, 0, 300, 1, 0, 0, 1)
     self.playerLight = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
+    --self.playerLight2 = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
     self.lightCanvas = love.graphics.newCanvas()
 
     self.parallaxLayers = {
@@ -89,10 +91,13 @@ function Game:update(dt)
 
     RainDrop.generateRain(cx,cy, self.world)
     RainDrop.updateRain(dt)
+    Grass.updateAll(dt)
 
     Checkpoint.updateAll(dt)
 
-    self.lighter:updateLight(self.playerLight, self.player.x, self.player.y)
+    --self.lighter:updateLight(self.playerLight3, self.player.x, self.player.y, 600 * self.player.fireStrength + math.random(-10 *self.player.fireStrength , 10 * self.player.fireStrength))
+    self.lighter:updateLight(self.playerLight, self.player.x, self.player.y, 500 * self.player.fireStrength + math.random(-10 *self.player.fireStrength , 10 * self.player.fireStrength))
+    --self.lighter:updateLight(self.playerLight2, self.player.x, self.player.y, 400 * self.player.fireStrength + math.random(-10 *self.player.fireStrength , 10 * self.player.fireStrength))
 
     self.powerLevelBar:setLevel(self.player.fireStrength)
 
