@@ -3,16 +3,15 @@ local Button = Object:extend()
 function Button:new(x, y, sprite, todo)
     self.x = x or 0
     self.y = y or 0
-    self.w = w or 0
-    self.h = h or 0
-    self.text = text
     self.todo = todo
     self.offset = 1
 
     self.sprite =  sprite
 
-    self.w = self.sprite:getWidth()
-    self.h = self.sprite:getHeight()
+    self.scale = 2
+
+    self.w = self.sprite:getWidth() * self.scale
+    self.h = self.sprite:getHeight() * self.scale
 end
 
 function Button:draw()
@@ -22,7 +21,7 @@ function Button:draw()
     --love.graphics.rectangle("fill", self.x + self.offset, self.y + self.offset, self.w - self.offset*2, self.h - self.offset*2)
     --love.graphics.setColor( 1,1,1 )
     --love.graphics.print( self.text, self.x, self.y, 0, 1, 1)
-    love.graphics.draw(self.sprite, self.x, self.y)
+    love.graphics.draw(self.sprite, self.x, self.y, 0, self.scale, self.scale)
 end
 
 function Button:update(dt)

@@ -38,6 +38,9 @@ function Game:enter()
     --self.playerLight2 = self.lighter:addLight(0, 0, 300, 1, 1, 1, 1)
     self.lightCanvas = love.graphics.newCanvas()
 
+    self.font = love.graphics.newFont("assets/fonts/Gelio Greek Diner.ttf", 24)
+    love.graphics.setFont(self.font)
+
     self.parallaxLayers = {
         parallax_1 = Parallax.new(self.camera, 1.25),
         parallax_2 = Parallax.new(self.camera, 1)
@@ -149,9 +152,9 @@ function Game.drawGame(l, t, w, h)
     Game.openTransitionAnimation:draw()
     Game.closeTransitionAnimation:draw()
 
-    love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
-    love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
-    love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(love.graphics.getWidth() -150, 10))
+   -- love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
+   -- love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
+    love.graphics.print("Score: "..tostring(Game.player.score), Game.camera:toWorld(20, 10))
 
     Game.powerLevelBar:draw(Game.camera:toWorld(love.graphics.getWidth() /2 - Game.powerLevelBar.w, 10))
 end

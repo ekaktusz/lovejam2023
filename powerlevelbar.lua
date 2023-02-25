@@ -2,7 +2,7 @@ local Powerlevelbar = Object:extend()
 
 function Powerlevelbar:new()
     self.w = 300
-    self.h = 30
+    self.h = 10
     self.offset = 2
 
     self.level = 0.5
