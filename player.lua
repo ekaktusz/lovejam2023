@@ -18,6 +18,10 @@ function Player:new(world)
     self.width = 64
     self.height = 64
 
+    self.lastCheckpoint = {}
+    self.lastCheckpoint.x = 100
+    self.lastCheckpoint.y = 0
+
     self.acceleration = 4000 *1.5
     self.friction = 3500 *1.5
     self.maxSpeed = 200 *1.5
@@ -227,6 +231,11 @@ end
 function Player:syncPhysics()
     self.x, self.y = self.physics.body:getPosition()
     self.physics.body:setLinearVelocity(self.dx, self.dy)
+end
+
+function Player:respawn()
+    self.physics.body:setPosition(self.lastCheckpoint.x,self.lastCheckpoint.y)
+    self.fireStrength = 0.5
 end
 
 return Player

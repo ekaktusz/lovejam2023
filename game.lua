@@ -65,6 +65,8 @@ function Game:update(dt)
     if self.closeTransitionAnimation:isFinished() then
         self.openTransitionAnimation:start()
         self.closeTransitionAnimation:reset()
+        self.player:respawn()
+        self.gameOver = false
     end
 
     if self.openTransitionAnimation:isFinished() then

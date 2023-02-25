@@ -82,6 +82,7 @@ function Checkpoint.beginContact(a, b, collision)
         if (a == checkpoint.physics.fixture and b == Game.player.physics.fixture) or (b == checkpoint.physics.fixture and a == Game.player.physics.fixture) then
             checkpoint.physics.body:destroy()
             checkpoint.checked = true
+            Game.player.lastCheckpoint = {x=checkpoint.x, y=checkpoint.y}
             checkpoint.whooshAudio:play()
             return true
         end
