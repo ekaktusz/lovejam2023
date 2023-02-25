@@ -1,17 +1,20 @@
 local GameState = require("vendor.hump.gamestate")
 
 local Button = require("button")
+local TransitionAnimation = require("transition_animation")
 Menu = {}
 
 function Menu:enter()
     self.background = love.graphics.newImage("assets/imgs/map_v07.png")
+
+    self.switchStateTransition = TransitionAnimation("close")
 
     self.font = love.graphics.newFont("assets/fonts/Gelio Greek Diner.ttf", 120)
     love.graphics.setFont(self.font)
 
     local startButtonSprite = love.graphics.newImage("assets/imgs/startgombgorogbetus.png")
     self.startButton = Button(1000, 250, startButtonSprite, function () 
-        GameState.switch(Game)
+        self.switchStateTransition:start()
     end)
     --local mapButtonSprite = love.graphics.newImage("assets/imgs/mapbuttonfire1.png")
     --self.mapButton = Button(50, 100,mapButtonSprite, function () 
@@ -29,10 +32,19 @@ function Menu:draw()
     love.graphics.print("Prometheus", 750, 100)
 
     self.startButton:draw()
+
+    self.switchStateTransition:draw()
     --self.mapButton:draw()
 end
 
 function Menu:update(dt)
+    if self.switchStateTransition:isFinished() then
+        self.switchStateTransition:reset()
+        GameState.switch(Game)
+    end
+
+    self.switchStateTransition:update(dt)
+
     self.startButton:update(dt)
     --self.mapButton:update(dt)
 end

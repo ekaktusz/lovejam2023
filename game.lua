@@ -149,8 +149,9 @@ function Game.drawGame(l, t, w, h)
 
     local cx, cy = Game.camera:toWorld(love.graphics:getWidth()/2, love.graphics:getHeight()/2)
     
-    Game.openTransitionAnimation:draw()
-    Game.closeTransitionAnimation:draw()
+    local tx, ty = Game.camera:toWorld(0, 0)
+    Game.openTransitionAnimation:draw(tx,ty)
+    Game.closeTransitionAnimation:draw(tx,ty)
 
    -- love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
    -- love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))

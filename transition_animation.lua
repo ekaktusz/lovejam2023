@@ -27,7 +27,7 @@ function TransitionAnimation:update()
     end 
 end
 
-function TransitionAnimation:draw()
+function TransitionAnimation:draw(x, y)
 
     if not self.started then return end
     --love.graphics.setColor(0,0,0)
@@ -46,7 +46,9 @@ function TransitionAnimation:draw()
     --love.graphics.setColor(1, 1, 1, 1 - transitionTimer)
     --love.graphics.rectangle("fill")
 
-    local cx, cy = Game.camera:toWorld(0, 0)
+    local cx = x or 0
+    local cy = y or 0
+
     love.graphics.setColor(0, 0, 0, self.alpha)
     love.graphics.rectangle("fill", cx, cy, love.graphics:getWidth(), love.graphics:getHeight())
 
