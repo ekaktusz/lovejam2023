@@ -67,7 +67,7 @@ function Menu:keypressed(key, scancode, isrepeat)
     end
 end
 
-function love.mousepressed(x, y, button, istouch)
+function Menu:mousepressed(x, y, button, istouch)
     Menu.startButton:mousepressed(x, y,button,istouch)
     --Menu.mapButton:mousepressed(x,y,button,istouch)
  end

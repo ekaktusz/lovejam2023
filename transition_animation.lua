@@ -1,7 +1,7 @@
 local TransitionAnimation = Object:extend()
 
-function TransitionAnimation:new(mode)
-    self.speed = 0.03
+function TransitionAnimation:new(mode, speed)
+    self.speed = speed or 0.03
 
     self.mode = mode
     self.alpha = 1 -- if open
