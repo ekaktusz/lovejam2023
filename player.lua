@@ -13,6 +13,13 @@ GROUP_RAINDROP = -2
 function Player:new(world)
     self.x = 100
     self.y = 0
+
+    for i,a in ipairs(Game.map.layers.player_start_pos.objects) do
+		self.x = a.x
+        self.y = a.y
+        break
+	end
+
     self.dx = 0
     self.dy = 0
     self.width = 64
