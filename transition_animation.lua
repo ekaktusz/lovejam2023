@@ -1,10 +1,6 @@
 local TransitionAnimation = Object:extend()
 
 function TransitionAnimation:new(mode)
-    self.x = 0
-    self.y = 0
-
-    
     self.speed = 1.1
 
     self.mode = mode
@@ -64,6 +60,15 @@ function TransitionAnimation:isFinished()
     print(self.level)
 
     return self.level < 0
+end
+
+function TransitionAnimation:reset()
+    self.level = 0 -- if open
+    self.started = false
+
+    if self.mode == "close" then
+        self.level = love.graphics:getWidth()
+    end
 end
 
 return TransitionAnimation
