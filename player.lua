@@ -96,9 +96,9 @@ end
 function Player:draw()
     --love.graphics.rectangle("fill", self.x - self.width / 2, self.y - self.height / 2, self.width, self.height)
     if self.direction == "right" then
-        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x - self.width / 2, self.y - self.height / 2, 0, 1, 1)
+        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x - self.width / 2, self.y - self.height / 2, 0, 0.5 + self.fireStrength, 0.5 + self.fireStrength)
     elseif self.direction == "left" then
-        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x + self.width / 2, self.y - self.height / 2, 0, -1, 1)
+        self.currentAnimation.animation:draw(self.currentAnimation.texture, self.x + self.width / 2, self.y - self.height / 2, 0, -(0.5 + self.fireStrength), 0.5 + self.fireStrength)
     end
 end
 

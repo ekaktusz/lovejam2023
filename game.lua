@@ -5,6 +5,7 @@ local gamera = require("vendor.gamera.gamera")
 local Lighter = require("vendor.lighter")
 local Parallax = require ("vendor.parallax.parallax")
 local GameState = require("vendor.hump.gamestate")
+local Timer = require("vendor.hump.timer")
 local Console = require("vendor.console.console")
 
 local RainDrop = require("rain")
@@ -49,6 +50,9 @@ function Game:enter()
     Amphora.spawnAmphoras()
     Grass.spawnGrass()
     Checkpoint.spawnCheckpoints()
+
+    
+    Timer.every(1, function() self.player.fireStrength = self.player.fireStrength - 0.01 end)
 end
 
 function Game:update(dt)
@@ -77,6 +81,8 @@ function Game:update(dt)
     love.graphics.clear(0.4, 0.4, 0.4) -- Global illumination level
     Game.lighter:drawLights()
     love.graphics.setCanvas()
+
+    Timer.update(dt)
 end
 
 function Game.drawGame(l, t, w, h)
