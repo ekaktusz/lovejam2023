@@ -3,6 +3,8 @@ local activeCheckpoints = {}
 
 local anim8 = require("vendor.anim8.anim8")
 
+Checkpoint.whooshAudio = love.audio.newSource("assets/audio/fire/whoosh-2.wav", "stream")
+
 function Checkpoint:new(x, y)
     self.x = x or 0
     self.y = y or 0
@@ -78,6 +80,7 @@ function Checkpoint.beginContact(a, b, collision)
         if (a == checkpoint.physics.fixture and b == Game.player.physics.fixture) or (b == checkpoint.physics.fixture and a == Game.player.physics.fixture) then
             checkpoint.physics.body:destroy()
             checkpoint.checked = true
+            Checkpoint.whooshAudio:play()
             return true
         end
     end
