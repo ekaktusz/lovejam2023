@@ -57,13 +57,19 @@ function Game:enter()
 
     self.closeTransitionAnimation = TransitionAnimation("close")
     self.openTransitionAnimation = TransitionAnimation("open")
+    self.pauseCloseTransition = TransitionAnimation("close")
     
     Amphora.spawnAmphoras()
     Grass.spawnGrass()
     Checkpoint.spawnCheckpoints()
 
+    self.openTransitionAnimation:start()
     
     Timer.every(1, function() self.player.fireStrength = self.player.fireStrength - 0.01 end)
+end
+
+function Game:resume()
+    self.rainAudio:play()
 end
 
 function Game:update(dt)
@@ -76,6 +82,16 @@ function Game:update(dt)
 
     if self.openTransitionAnimation:isFinished() then
         self.openTransitionAnimation:reset()
+    end
+
+    if self.pauseCloseTransition:isFinished() then
+        self.pauseCloseTransition:reset()
+        GameState.push(Pause)
+    end
+    
+    self.pauseCloseTransition:update(dt)
+    if self.pauseCloseTransition.started then
+        return
     end
 
     self.openTransitionAnimation:update(dt)
@@ -152,6 +168,7 @@ function Game.drawGame(l, t, w, h)
     local tx, ty = Game.camera:toWorld(0, 0)
     Game.openTransitionAnimation:draw(tx,ty)
     Game.closeTransitionAnimation:draw(tx,ty)
+    Game.pauseCloseTransition:draw(tx,ty)
 
    -- love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
    -- love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
@@ -184,7 +201,8 @@ function Game:keypressed(key, scancode, isrepeat)
 
     Game.player:keypressed(key)
     if key == "escape" then
-        GameState.push(Pause)
+        love.audio.pause()
+        Game.pauseCloseTransition:start()
     end
 end
 

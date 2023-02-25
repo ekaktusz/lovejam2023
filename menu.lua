@@ -7,6 +7,8 @@ Menu = {}
 function Menu:enter()
     self.background = love.graphics.newImage("assets/imgs/map_v07.png")
 
+
+    self.startOpenTransition = TransitionAnimation("open")
     self.switchStateTransition = TransitionAnimation("close")
 
     self.font = love.graphics.newFont("assets/fonts/Gelio Greek Diner.ttf", 120)
@@ -20,9 +22,11 @@ function Menu:enter()
     --self.mapButton = Button(50, 100,mapButtonSprite, function () 
     --    GameState.switch(Game)
     --end)
+    self.startOpenTransition:start()
 end
 
 function Menu:draw()
+    love.graphics.setColor(1, 1, 1)
     love.graphics.draw(self.background, 0, 0, 0, 1, 1)
 
     love.graphics.setColor(0, 0, 0, 0.5)
@@ -33,13 +37,21 @@ function Menu:draw()
 
     self.startButton:draw()
 
+    self.startOpenTransition:draw()
+
     self.switchStateTransition:draw()
     --self.mapButton:draw()
 end
 
 function Menu:update(dt)
+    self.startOpenTransition:update(dt)
+
+    if not self.startOpenTransition:isFinished() then
+        return
+    end
     if self.switchStateTransition:isFinished() then
         self.switchStateTransition:reset()
+        self.startOpenTransition:reset()
         GameState.switch(Game)
     end
 

@@ -51,6 +51,7 @@ function TransitionAnimation:draw(x, y)
 
     love.graphics.setColor(0, 0, 0, self.alpha)
     love.graphics.rectangle("fill", cx, cy, love.graphics:getWidth(), love.graphics:getHeight())
+    love.graphics.setColor(1, 1, 1)
 
    -- for i=love.graphics:getWidth(),self.level,-1 do
    --     love.graphics.circle("line", Game.player.x,Game.player.y, i)
