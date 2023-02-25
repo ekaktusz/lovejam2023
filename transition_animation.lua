@@ -1,14 +1,14 @@
 local TransitionAnimation = Object:extend()
 
 function TransitionAnimation:new(mode)
-    self.speed = 1.1
+    self.speed = 0.03
 
     self.mode = mode
-    self.level = 0 -- if open
+    self.alpha = 1 -- if open
     self.started = false
 
     if mode == "close" then
-        self.level = love.graphics:getWidth()
+        self.alpha = 0
     end
 end
 
@@ -20,19 +20,19 @@ function TransitionAnimation:update()
     end
 
     if self.mode == "close" then
-        self.level = self.level - math.max(self.speed * self.level / 30,10)
+        self.alpha = self.alpha + self.speed
     else
         -- open
-        self.level = self.level + math.max(self.speed * self.level / 30, 10)
+        self.alpha = self.alpha - self.speed
     end 
 end
 
 function TransitionAnimation:draw()
 
-    if not self.started or self:isFinished() then return end
-    love.graphics.setColor(0,0,0)
-
-    print(self.level)
+    if not self.started then return end
+    --love.graphics.setColor(0,0,0)
+--
+    --print(self.level)
 
     -- open
     --for i=love.graphics:getWidth(),self.level,-1 do
@@ -43,10 +43,17 @@ function TransitionAnimation:draw()
     --    love.graphics.circle("line", Game.player.x,Game.player.y, i)
     --end
 
-    for i=love.graphics:getWidth(),self.level,-1 do
-        love.graphics.circle("line", Game.player.x,Game.player.y, i)
-        --love.graphics.circle("line", Game.player.x+1,Game.player.y+1, i)
-    end
+    --love.graphics.setColor(1, 1, 1, 1 - transitionTimer)
+    --love.graphics.rectangle("fill")
+
+    local cx, cy = Game.camera:toWorld(0, 0)
+    love.graphics.setColor(0, 0, 0, self.alpha)
+    love.graphics.rectangle("fill", cx, cy, love.graphics:getWidth(), love.graphics:getHeight())
+
+   -- for i=love.graphics:getWidth(),self.level,-1 do
+   --     love.graphics.circle("line", Game.player.x,Game.player.y, i)
+   --     --love.graphics.circle("line", Game.player.x+1,Game.player.y+1, i)
+   -- end
 end
 
 function TransitionAnimation:start()
@@ -55,19 +62,19 @@ end
 
 function TransitionAnimation:isFinished()
     if self.mode == "open" then
-        return love.graphics:getWidth() < self.level
+        return self.alpha <= 0
     end
-    print(self.level)
+    print(self.alpha)
 
-    return self.level < 0
+    return self.alpha >= 1
 end
 
 function TransitionAnimation:reset()
-    self.level = 0 -- if open
+    self.alpha = 1 -- if open
     self.started = false
 
     if self.mode == "close" then
-        self.level = love.graphics:getWidth()
+        self.alpha = 0
     end
 end
 

@@ -64,10 +64,16 @@ end
 function Game:update(dt)
     if self.closeTransitionAnimation:isFinished() then
         self.openTransitionAnimation:start()
+        self.closeTransitionAnimation:reset()
     end
 
-    self.closeTransitionAnimation:update(dt)
+    if self.openTransitionAnimation:isFinished() then
+        self.openTransitionAnimation:reset()
+    end
+
     self.openTransitionAnimation:update(dt)
+
+    self.closeTransitionAnimation:update(dt)
     if self.gameOver then return end
     if Console.isEnabled() then return end
 
@@ -132,9 +138,9 @@ function Game.drawGame(l, t, w, h)
     love.graphics.setBlendMode("alpha")
 
     local cx, cy = Game.camera:toWorld(love.graphics:getWidth()/2, love.graphics:getHeight()/2)
-
-    Game.closeTransitionAnimation:draw()
+    
     Game.openTransitionAnimation:draw()
+    Game.closeTransitionAnimation:draw()
 
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
     love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
