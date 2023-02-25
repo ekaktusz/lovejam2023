@@ -15,6 +15,7 @@ local Checkpoint = require("checkpoint")
 
 local Player = require("player")
 local Powerlevelbar = require("powerlevelbar")
+local TransitionAnimation = require("transition_animation")
 
 
 Console.ENV.Game = Game -- make game parameters accessible from the game console
@@ -45,7 +46,12 @@ function Game:enter()
     self.rainAudio:setVolume(0.5)
     self.rainAudio:play()
 
+    self.gameOver = false
+
     self.powerLevelBar = Powerlevelbar()
+
+    self.closeTransitionAnimation = TransitionAnimation("close")
+    self.openTransitionAnimation = TransitionAnimation("open")
     
     Amphora.spawnAmphoras()
     Grass.spawnGrass()
@@ -56,7 +62,13 @@ function Game:enter()
 end
 
 function Game:update(dt)
-    
+    if self.closeTransitionAnimation:isFinished() then
+        self.openTransitionAnimation:start()
+    end
+
+    self.closeTransitionAnimation:update(dt)
+    self.openTransitionAnimation:update(dt)
+    if self.gameOver then return end
     if Console.isEnabled() then return end
 
     self.world:update(dt)
@@ -82,8 +94,14 @@ function Game:update(dt)
     Game.lighter:drawLights()
     love.graphics.setCanvas()
 
+    if self.player.fireStrength <= 0 and not self.gameOver then
+        self.gameOver = true
+        self.closeTransitionAnimation:start()
+    end
+
     Timer.update(dt)
 end
+
 
 function Game.drawGame(l, t, w, h)
 
@@ -113,6 +131,10 @@ function Game.drawGame(l, t, w, h)
     love.graphics.draw(Game.lightCanvas)
     love.graphics.setBlendMode("alpha")
 
+    local cx, cy = Game.camera:toWorld(love.graphics:getWidth()/2, love.graphics:getHeight()/2)
+
+    Game.closeTransitionAnimation:draw()
+    Game.openTransitionAnimation:draw()
 
     love.graphics.print("FPS: "..tostring(love.timer.getFPS( )), Game.camera:toWorld(10, 10))
     love.graphics.print("Powerlevel: "..tostring(Game.player.fireStrength), Game.camera:toWorld(love.graphics.getWidth() /2, 10))
@@ -120,7 +142,6 @@ function Game.drawGame(l, t, w, h)
 
     Game.powerLevelBar:draw(Game.camera:toWorld(love.graphics.getWidth() /2 - Game.powerLevelBar.w, 10))
 end
-  
 
 function Game:draw()
     self.camera:draw(Game.drawGame)

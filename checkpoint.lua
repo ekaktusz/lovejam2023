@@ -3,7 +3,7 @@ local activeCheckpoints = {}
 
 local anim8 = require("vendor.anim8.anim8")
 
-Checkpoint.whooshAudio = love.audio.newSource("assets/audio/fire/whoosh-2.wav", "stream")
+
 
 function Checkpoint:new(x, y)
     self.x = x or 0
@@ -33,6 +33,8 @@ function Checkpoint:new(x, y)
     self.animations.idle.texture = love.graphics.newImage("assets/textures/checkpoint_idle.png")
     self.animations.idle.grid = anim8.newGrid(64,64, self.animations.idle.texture:getWidth(), self.animations.idle.texture:getHeight())
     self.animations.idle.animation = anim8.newAnimation(self.animations.idle.grid("1-14", 1), 0.1)
+
+    self.whooshAudio = love.audio.newSource("assets/audio/fire/whoosh-2.wav", "stream")
 
     self.currentAnimation = self.animations.lit
 end
@@ -80,7 +82,7 @@ function Checkpoint.beginContact(a, b, collision)
         if (a == checkpoint.physics.fixture and b == Game.player.physics.fixture) or (b == checkpoint.physics.fixture and a == Game.player.physics.fixture) then
             checkpoint.physics.body:destroy()
             checkpoint.checked = true
-            Checkpoint.whooshAudio:play()
+            checkpoint.whooshAudio:play()
             return true
         end
     end

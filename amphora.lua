@@ -2,6 +2,8 @@ local Amphora = Object:extend()
 
 local activeAmphoras = {}
 
+Amphora.sound = love.audio.newSource("assets/audio/point.wav", "stream")
+
 function Amphora:new(x, y)
     self.x = x or 0
     self.y = y or 0
@@ -14,6 +16,8 @@ function Amphora:new(x, y)
     self.physics.shape = love.physics.newRectangleShape(self.width, self.height)
     self.physics.fixture = love.physics.newFixture(self.physics.body, self.physics.shape)
     self.physics.fixture:setSensor(true)
+
+    self.sound = love.audio.newSource("assets/audio/point.wav", "stream")
 end
 
 function Amphora:draw()
@@ -37,6 +41,7 @@ function Amphora.beginContact(a, b, collision)
     for i,amphora in ipairs(activeAmphoras) do
         if (a == amphora.physics.fixture and b == Game.player.physics.fixture) or (b == amphora.physics.fixture and a == Game.player.physics.fixture) then
             amphora.physics.body:destroy()
+            love.audio.play(amphora.sound)
             table.remove(activeAmphoras, i)
             Game.player.score = Game.player.score + 1
             return true
