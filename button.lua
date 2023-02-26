@@ -32,7 +32,6 @@ function Button:mousepressed(x, y, button, istouch)
     if button == 1 then
        if x > self.x and x < self.x + self.w then
             if y > self.y and y < self.y + self.h then
-                print("pukitank")
                 self:todo()
             end
        end

@@ -67,7 +67,6 @@ function TransitionAnimation:isFinished()
     if self.mode == "open" then
         return self.alpha <= 0
     end
-    print(self.alpha)
 
     return self.alpha >= 1
 end
